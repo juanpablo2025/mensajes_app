@@ -58,8 +58,51 @@ public class MessagesDAO {
 
     }
 
-    public static void DeleteMessage(){
+    public static void DeleteMessage(int idMessage){
+        Conection dbConection = new Conection();
+        try(Connection Conection = dbConection.getConnection()) {
+            PreparedStatement ps = null;
 
 
+            try {
+                String query = "DELETE FROM message where idMessage = ?";
+                ps = Conection.prepareStatement(query);
+                ps.setInt(1, idMessage);
+                ps.executeUpdate();
+                System.out.println("el mensaje ha sido borrado");
+            } catch (SQLException e) {
+                System.out.println(e);
+                System.out.println("no se pudo borrar el mensaje");
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+
+
+    }
+
+    public static void UpdateMessages(Messages messages){
+        Conection dbConection = new Conection();
+
+        try(Connection conection= dbConection.getConnection()){
+            PreparedStatement ps= null;
+
+            try{
+                String query = "UPDATE messages SET Message =? Where idMensage =?";
+                ps=conection.prepareStatement(query);
+                ps.setString(1, messages.getMessage());
+                ps.setInt(2,messages.getIdMessage());
+                System.out.println("Mensaje actualizado");
+
+            }catch (SQLException ex){
+                System.out.println(ex);
+                System.out.println("No se pudo actualizar el mensaje");
+            }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
